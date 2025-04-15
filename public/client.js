@@ -67,8 +67,12 @@ setupWebSocket(ws);
 
 // Переподключение при активации вкладки
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
-    console.log('Вкладка была неактивная, переподключаемся...');
+  // if (document.visibilityState === 'visible') {
+  //   location.reload(); // слишком жестокий способ...
+  // }
+  
+  if (document.visibilityState === 'visible'/* && ws.readyState !== WebSocket.OPEN*/) {
+    console.log('Вкладка была в фоне, переподключаемся...');
     ws = new WebSocket(gameUrl);
     setupWebSocket(ws); // Привязываем обработчики к новому соединению
   }

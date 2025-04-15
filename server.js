@@ -41,7 +41,8 @@ function initializeGame(gameState, cardCount) {
 
   gameState.board = Array(7).fill().map(() => Array(7).fill(null));
   const treasures = gameState.allCards.slice();
-  const playerColors = ['orange', 'crimson', '#35b83f', 'royalblue'];
+  // порядок цветов для игроков по часовой стрелке !!!
+  const playerColors = ['orange', 'crimson', 'royalblue', '#35b83f'];
 
   gameState.unusedTiles = [
     ...Array(10).fill().map(() => ({ type: 'L', rotation: Math.floor(Math.random() * 4) * 90, treasure: null, isStart: false })),
@@ -54,14 +55,14 @@ function initializeGame(gameState, cardCount) {
   const startTiles = [
     { type: 'L', rotation: 90, treasure: null, isStart: true, startColor: playerColors[0], startPlayer: 0 },
     { type: 'L', rotation: 180, treasure: null, isStart: true, startColor: playerColors[1], startPlayer: 1 },
-    { type: 'L', rotation: 0, treasure: null, isStart: true, startColor: playerColors[2], startPlayer: 2 },
-    { type: 'L', rotation: 270, treasure: null, isStart: true, startColor: playerColors[3], startPlayer: 3 }
+    { type: 'L', rotation: 270, treasure: null, isStart: true, startColor: playerColors[2], startPlayer: 2 },
+    { type: 'L', rotation: 0, treasure: null, isStart: true, startColor: playerColors[3], startPlayer: 3 }
   ];
 
   gameState.board[0][0] = startTiles[0];
   gameState.board[0][6] = startTiles[1];
-  gameState.board[6][0] = startTiles[2];
-  gameState.board[6][6] = startTiles[3];
+  gameState.board[6][6] = startTiles[2];
+  gameState.board[6][0] = startTiles[3];
 
   for (let y = 0; y < 7; y++) {
     for (let x = 0; x < 7; x++) {
@@ -76,8 +77,8 @@ function initializeGame(gameState, cardCount) {
   gameState.players = [
     { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
     { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
-    { id: 2, position: [0, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
-    { id: 3, position: [6, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) }
+    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
+    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) }
   ];
 
   console.log('Player 0 cards:', gameState.players[0].cards);
