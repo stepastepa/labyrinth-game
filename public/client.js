@@ -18,7 +18,63 @@ const gameId = urlParams.get('game');
 const playerId = parseInt(urlParams.get('player'));
 const cardCount = urlParams.get('cards');
 
-const ws = new WebSocket(`ws://${location.host}?game=${gameId}&player=${playerId}&cards=${cardCount}`); // -- auto IP -- //
+const gameUrl = `ws://${location.host}?game=${gameId}&player=${playerId}&cards=${cardCount}`; // -- auto IP -- //
+let ws = new WebSocket(gameUrl);
+
+function setupWebSocket(ws) {
+  ws.onopen = () => {
+    console.log('Connected to server');
+  };
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log(data);
+    if (data.type === 'init') {
+      gameState = data.gameState;
+      localPlayerId = data.playerId;
+      renderBoard();
+      renderFreeTile();
+      renderPlayerInfo();
+    } else if (data.type === 'update') {
+      gameState = data.gameState;
+      renderBoard(data.movedPlayer, data.shiftedPlayers);
+      renderFreeTile();
+      renderPlayerInfo();
+      if (data.gameOver) {
+        showGameOver(data.winner, data.rankings);
+      }
+    } else if (data.type === 'rotateUpdate') {
+      gameState.freeTile = data.freeTile;
+      renderFreeTile();
+    } else if (data.type === 'treasureCollected') {
+      console.log("Here is my treasure!");
+      triggerPickingEffect(data.playerId);
+    }
+  };
+
+  ws.onclose = () => {
+    console.log('WebSocket connection closed');
+    // Можно добавить логику автоматического переподключения, если нужно
+  };
+
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+}
+
+// Инициализация WebSocket при первом подключении
+setupWebSocket(ws);
+
+// Переподключение при активации вкладки
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
+    console.log('Вкладка была неактивная, переподключаемся...');
+    ws = new WebSocket(gameUrl);
+    setupWebSocket(ws); // Привязываем обработчики к новому соединению
+  }
+});
+
+
 
 const treasureEmojis = {
   'gold': '💰', 'key': '🔑', 'gem': '💎', 'coin': '🪙', 'skull': '💀',
@@ -26,36 +82,6 @@ const treasureEmojis = {
   'map': '🗺️', 'lamp': '🪔', 'chest': '📦', 'potion': '🧪', 'scroll': '📜',
   'wand': '🪄', 'cloak': '🧥', 'boots': '👢', 'gloves': '🧤', 'helmet': '⛑️',
   'mirror': '🪞', 'compass': '🧭', 'amulet': '📿', 'torch': '🔦'
-};
-
-ws.onopen = () => {
-  console.log('Connected to server');
-};
-
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log(data);
-  if (data.type === 'init') {
-    gameState = data.gameState;
-    localPlayerId = data.playerId;
-    renderBoard();
-    renderFreeTile();
-    renderPlayerInfo();
-  } else if (data.type === 'update') {
-    gameState = data.gameState;
-    renderBoard(data.movedPlayer, data.shiftedPlayers);
-    renderFreeTile();
-    renderPlayerInfo();
-    if (data.gameOver) {
-      showGameOver(data.winner, data.rankings);
-    }
-  } else if (data.type === 'rotateUpdate') {
-    gameState.freeTile = data.freeTile;
-    renderFreeTile();
-  } else if (data.type === 'treasureCollected') {
-    console.log("Here is my treasure!");
-    triggerPickingEffect(data.playerId);
-  }
 };
 
 function triggerPickingEffect(playerId) {
@@ -110,8 +136,8 @@ function renderBoard(movedPlayer, shiftedPlayers) {
       if (tileData.isStart && tileData.startColor) {
         const indicator = document.createElement('div');
         indicator.classList.add('start-indicator', `start-${tileData.startPlayer}`);
-        // indicator.style.backgroundColor = tileData.startColor;
         tile.appendChild(indicator);
+
         // additional motion effects
         const fx = document.createElement('div');
         fx.classList.add('effects');
@@ -250,13 +276,6 @@ function animatePlayer(playerElement, path, callback) {
 }
 
 function showGameOver(winner, rankings) {
-
-  // исчезание в телепорте сделал в CSS, это не нужные остатки:
-  // const winnerElement = document.getElementById(`player-${winner}`);
-  // if (winnerElement) {
-  //   winnerElement.classList.add('hidden');
-  // }
-
   rankingsElement.innerHTML = '';
   rankings.forEach((rank, index) => {
     const rankElement = document.createElement('p');
