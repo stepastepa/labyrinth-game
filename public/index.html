@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labyrinth Game - Menu</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="container">
+  <div class="menu">
+    <h1>⚜️ Labyrinth ⚜️</h1>
+    <div class="parameters">
+      <label for="cardCount">How many cards:</label>
+      <select id="cardCount">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="24" selected>24</option>
+      </select>
+    </div>
+    <button class="button-main create" onclick="generateLinks()">
+      <span>Create game</span>
+      <img src="./images/arrow-right.svg" alt="forward">
+    </button>
+    <div id="links" class="hidden"></div>
+    <span class="button-main back hidden">
+      <img src="./images/arrow-left.svg" alt="back">
+      <span>Back</span>
+    </span>
+  </div>
+  
+  <script>
+
+    const parameters = document.querySelector('.parameters');
+    const buttonCreate = document.querySelector('.create');
+    const buttonBack = document.querySelector('.back');
+    const links = document.querySelector('#links');
+
+    function toggleInterface() {
+      parameters.classList.toggle('hidden');
+      buttonCreate.classList.toggle('hidden');
+      buttonBack.classList.toggle('hidden');
+      links.classList.toggle('hidden');
+    }
+
+    function generateLinks() {
+      toggleInterface();
+      const cardCount = document.getElementById('cardCount').value;
+      const gameId = Math.random().toString(36).substring(2, 10);
+      
+      links.innerHTML = '';
+      for (let i = 0; i < 4; i++) {
+        const link = `${window.location.origin}/game.html?game=${gameId}&player=${i}&cards=${cardCount}`;
+        links.innerHTML += `<div class="link">Player ${i + 1}: <a href="${link}">${link}</a></div>`;
+      }
+    }
+
+    buttonBack.addEventListener('click', toggleInterface);
+
+  </script>
+</body>
+</html>

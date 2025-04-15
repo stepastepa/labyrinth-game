@@ -1,0 +1,13 @@
+{
+  "name": "labyrynth",
+  "version": "1.0.0",
+  "author": "stepa+grok",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "ws": "^8.18.1"
+  }
+}

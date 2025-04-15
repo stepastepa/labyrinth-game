@@ -1,0 +1,789 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  -webkit-tap-highlight-color: transparent; /* for chrome blue selection overlay */
+}
+
+html {
+  --color-0: orange;
+  --color-1: crimson;
+  --color-2: #35b83f;
+  --color-3: royalblue;
+}
+
+body {
+  font-family: monospace;
+  height: 100dvh;
+  /* background: hsl(233, 34%, 0%); */
+  background-image: url(./images/bg.png);
+  background-position: center;
+  image-rendering: pixelated;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+  /* overflow: hidden; */
+}
+
+.game-container {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.board-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 7fr 1fr; /* Левый столбец, центр, правый столбец */
+  grid-template-rows: 1fr 7fr 1fr;    /* Верхний ряд, центр, нижний ряд */
+  width: 100vmin;
+  height: 100vmin;
+  overflow: hidden; /* fx scroll bugs (too huge)*/
+}
+
+.board {
+  grid-column: 2 / 3; /* Центр по горизонтали */
+  grid-row: 2 / 3;    /* Центр по вертикали */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 0 0.6vmin var(--player-color);
+}
+
+.corner {
+  background: transparent;
+}
+
+.top-buttons {
+  grid-column: 2 / 3; /* Центр по горизонтали */
+  grid-row: 1 / 2;    /* Верхний ряд */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 100%;
+}
+
+.bottom-buttons {
+  grid-column: 2 / 3; /* Центр по горизонтали */
+  grid-row: 3 / 4;    /* Нижний ряд */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 100%;
+}
+
+.left-buttons {
+  grid-column: 1 / 2; /* Левый столбец */
+  grid-row: 2 / 3;    /* Центр по вертикали */
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  width: 100%;
+}
+
+.right-buttons {
+  grid-column: 3 / 4; /* Правый столбец */
+  grid-row: 2 / 3;    /* Центр по вертикали */
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  width: 100%;
+}
+
+.top-buttons > div,
+.bottom-buttons > div,
+.left-buttons > div,
+.right-buttons > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-buttons .shift-btn {
+  transform: rotate(180deg);
+}
+.bottom-buttons .shift-btn {
+  transform: rotate(0deg);
+}
+.left-buttons .shift-btn {
+  transform: rotate(90deg);
+}
+.right-buttons .shift-btn {
+  transform: rotate(-90deg);
+}
+
+.shift-btn {
+  width: 50%;
+  height: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.shift-btn img {
+  width: 100%;
+  height: 100%;
+  scale: 1;
+  transition: scale 0.15s ease;
+}
+.shift-btn:hover img {
+  scale: 1.15;
+}
+.shift-btn:active img {
+  scale: 1.3;
+}
+
+.interface {
+  flex: 1 1 auto;
+  width: 100vw;
+  max-height: 150px;
+  /* background: hsla(0, 0%, 0%); */
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.free-tile-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+}
+
+#freeTile {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 0.15rem var(--player-color);
+}
+
+#freeTile .tile-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  z-index: 1;
+}
+
+#freeTile > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  z-index: 2;
+}
+
+.rotate-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rotate-btn:hover {
+  opacity: 0.5;
+}
+.rotate-btn img {
+  width: 80%;
+  height: 80%;
+}
+
+.player-info {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.player-info:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--player-color);
+  filter: blur(50px);
+  opacity: 1;
+  z-index: -1;
+}
+
+.cards {
+  height: 100%;
+  aspect-ratio: 0.7 / 1;
+  background: #fff;
+  border: 0.2rem solid var(--player-color);
+  border-radius: 0.4rem;
+  font-size: 2rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow:
+    1px 1px 0px 0px rgb(0, 0, 0),
+    2px 2px 0px 0px var(--player-color),
+    3px 3px 0px 0px rgb(0, 0, 0),
+    4px 4px 0px 0px var(--player-color);
+}
+.winner .cards {
+  box-shadow: none;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  background-image: url('./images/card.png');
+  background-position: center;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.how-many {
+  flex: 0 0 auto;
+  color: white;
+  font-size: 0.8rem;
+  background-color: var(--player-color);
+  padding: 2px 8px;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  margin-top: -0.9rem;
+  margin-bottom: -1.1rem;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.winner .how-many {
+  display: none;
+  /* width: fit-content;
+  border-radius: 0.5rem;
+  padding: 0 0.6rem; */
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.tile-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  z-index: 1;
+}
+
+.tile.I .tile-bg { background-image: url('./images/linear.png'); }
+.tile.L .tile-bg { background-image: url('./images/corner.png'); }
+.tile.T .tile-bg { background-image: url('./images/intersection.png'); }
+
+.tile > span, .start-indicator, .player {
+  position: absolute;
+  z-index: 2;
+  user-select: none;
+}
+
+/* artefacts */
+.tile > span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4vmin;
+  transition: all 0.2s ease;
+}
+/* делаем артефакты крупнее, чтоб игрок их полностью не закрывал */
+.tile > span:has(+ .player) {
+  font-size: 6vmin;
+}
+
+.start-indicator {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  /* background-color: white;
+  border-radius: 50%;
+  border: 0.6vmin solid black;
+  box-shadow: 0 0 0 0.3vmin white; */
+}
+.start-indicator:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90% 90%;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+.start-0:after {
+  background-image: url(./images/start-0.svg);
+}
+.start-1:after {
+  background-image: url(./images/start-1.svg);
+}
+.start-2:after {
+  background-image: url(./images/start-2.svg);
+}
+.start-3:after {
+  background-image: url(./images/start-3.svg);
+}
+/* Применить стили к .start-indicator, если сразу после него идёт .player. */
+.start-indicator:has(+ .player):after {
+  background-size: 50% 50%; /* в firefox не сработает*/
+}
+.start-indicator.activated:has(+ .player):after {
+  background-size: 150% 150%; /* в firefox не сработает*/
+}
+.start-indicator.activated:after {
+  animation: start-rotating 0.5s linear infinite;
+}
+@keyframes start-rotating {
+  from {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-1turn);
+  }
+}
+.start-indicator.activated:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  border-radius: 50%;
+  background-color: fuchsia;
+  filter: blur(1.7vmin);
+  opacity: 1;
+  animation: portal-pulse 1.5s linear infinite;
+  pointer-events: none;
+  /* display: none; */
+}
+@keyframes portal-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+.start-0.activated:before {
+  background-color: var(--color-0);
+}
+.start-1.activated:before {
+  background-color: var(--color-1);
+}
+.start-2.activated:before {
+  background-color: var(--color-2);
+}
+.start-3.activated:before {
+  background-color:  var(--color-3);
+}
+
+.effects {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: blur(0.35vmin);
+  pointer-events: none;
+}
+.activated .effects {
+  animation: effects-motion 10s linear infinite;
+}
+@keyframes effects-motion {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0turn) scale(3);
+  }
+  50% {
+    opacity: 0.65;
+    transform: translate(-50%, -50%) rotate(-1.5turn) scale(4);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-3turn) scale(3);
+  }
+}
+.start-0 .effects {
+  background-image: url(./images/effects-0.svg);
+}
+.start-1 .effects {
+  background-image: url(./images/effects-1.svg);
+}
+.start-2 .effects {
+  background-image: url(./images/effects-2.svg);
+}
+.start-3 .effects {
+  background-image: url(./images/effects-3.svg);
+}
+
+.player {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player div {
+  --frame-size: 100%;
+  width: var(--frame-size);
+  height: var(--frame-size);
+  image-rendering: pixelated;
+  background-position: 0 0;
+  background-size: 500% 100%;
+  animation: idle 0.5s steps(4) infinite;
+  z-index: 2;
+}
+@keyframes idle {
+  from {
+    background-position: 0 0; /* Начало спрайта */
+  }
+  to {
+    background-position: 100% 0; /* Конец спрайта */
+  }
+}
+
+.player.active:after {
+  content: '';
+  width: 150%;
+  height: 150%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('./images/selection.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  animation: pulse 0.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(0.9); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.player.picking:before {
+  content: '';
+  --frame-size: 180%;
+  width: var(--frame-size);
+  height: var(--frame-size);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+  background-image: url('./images/picking.png');
+  background-size: 900% 100%;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  animation: sparkle 0.5s steps(8) infinite;
+}
+@keyframes sparkle {
+  from {
+    background-position: 0 0; /* Начало спрайта */
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    background-position: 100% 0; /* Конец спрайта */
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+
+.activated + .player:not(.active) {
+  animation: teleport 2.5s linear forwards;
+}
+@keyframes teleport {
+  from {
+    transform: translate(-50%, -50%) rotate(0turn) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-5turn) scale(0.1);
+    opacity: 0;
+    filter: blur(1px);
+  }
+}
+
+/* Стили для меню результатов */
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  transition: opacity 2s ease;
+  z-index: 1000; /* Чтобы перекрывать всё */
+}
+.game-over-overlay:not(.hidden) {
+  opacity: 1;
+}
+.game-over-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.game-over-content {
+  color: white;
+  font-size: min(6vmin, 2rem); /* fluid */
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#rankings {
+  margin-top: 1rem;
+  margin-bottom: min(10vmin, 2.5rem);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#rankings p {
+  display: flex;
+  position: relative;
+  align-items: baseline; /* игроки стоят на baseline, как на земле */
+  gap: 0.5rem;
+}
+
+#rankings .player {
+  --player-size-ranking: min(8vmin, 4rem); /* fluid */
+  position: relative;
+  width: var(--player-size-ranking);
+  height: var(--player-size-ranking);
+  margin-right: 0.5rem;
+  bottom: calc(var(--player-size-ranking) / -6);
+
+  top: unset;
+  left: unset;
+  transform: unset;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-main {
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  /* border: 2px solid var(--player-color); */
+  border: none;
+  box-shadow:
+  0px 4px 0px white,
+  4px 0px 0px white,
+  -4px 0px 0px white,
+  0px -4px 0px white
+  ;
+  background-color: hsla(0, 0%, 0%, 0.25);
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+/* если иконка слева */
+.button-main img:has(+ span) {
+  margin-left: -0.4rem;
+}
+/* если иконка справа */
+.button-main span + img {
+  margin-right: -0.4rem;
+}
+.button-main:hover {
+  box-shadow:
+  0px 4px 0px white,
+  4px 0px 0px white,
+  -4px 0px 0px white,
+  0px -4px 0px white,
+  0px 0px 100px 0px var(--player-color)
+  ;
+}
+.button-main:active {
+  box-shadow:
+  0px 4px 0px white,
+  4px 0px 0px white,
+  -4px 0px 0px white,
+  0px -4px 0px white,
+  0px 0px 150px 20px var(--player-color)
+  ;
+}
+
+
+@media (min-aspect-ratio: 0.84/1) {
+  .game-container {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .board-wrapper {
+    width: 80vw;
+    height: 80vw;
+    max-height: 100dvh;
+    max-width: 100dvh;
+  }
+
+  .interface {
+    width: 20vw;
+    max-width: 150px;
+    height: 100dvh;
+    max-height: 100dvh;
+    gap: 1.5rem;
+    flex-direction: column;
+  }
+
+  .free-tile-container {
+    flex-direction: column;
+    height: unset;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .player-info {
+    width: 100%;
+    height: unset;
+  }
+
+  .cards {
+    width: unset;
+    height: 100%;
+    aspect-ratio: 0.7 / 1;
+  }
+
+  .how-many {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ======== index.html ======== */
+
+body.container {
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu {
+  position: relative;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+h1 {
+  font-size: max(1.5rem, 9vmin); /* fluid */
+}
+
+label {
+  font-size: 1.2rem;
+}
+
+select {
+  padding: 0.5rem;
+  margin: 1rem;
+}
+
+.menu .button-main {
+  --player-color: orange;
+  font-family: monospace;
+}
+
+#links {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  background-color: black;
+  /* border: 4px dotted white; */
+  box-shadow:
+  0px 8px 0px white,
+  8px 0px 0px white,
+  -8px 0px 0px white,
+  0px -8px 0px white
+  ;
+}
+.link {
+  padding: 0.75rem 1rem;
+}
+.link a {
+  color: white;
+}
+
+.parameters.hidden,
+.button-main.hidden,
+#links.hidden {
+  display: none;
+}

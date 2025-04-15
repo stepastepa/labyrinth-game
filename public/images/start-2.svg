@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g id="bg-2" transform="matrix(0.9,0,0,0.9,49.5,49.5)">
+        <circle cx="45" cy="45" r="45" style="fill:rgb(0,183,47);"/>
+    </g>
+    <g id="spiral2" transform="matrix(1.43075,0,0,1.43075,51.9817,49.7014)">
+        <path d="M26.398,28.568C27.399,30.509 24.275,30.875 23.172,30.232C20.181,28.489 20.98,24.201 23.069,22.116C26.806,18.386 32.972,19.778 36.076,23.575C40.631,29.147 38.581,37.408 33.055,41.472C25.689,46.888 15.27,44.155 10.268,36.889C3.973,27.745 7.401,15.141 16.413,9.211C27.327,2.03 42.128,6.157 48.98,16.918C57.054,29.6 52.224,46.606 39.712,54.376" style="fill:none;stroke:white;stroke-width:5px;"/>
+    </g>
+    <g id="stroke2" transform="matrix(0.9,0,0,0.9,49.5,49.5)">
+        <path d="M45,-12.222C13.418,-12.222 -12.222,13.418 -12.222,45C-12.222,76.582 13.418,102.222 45,102.222C76.582,102.222 102.222,76.582 102.222,45C102.222,13.418 76.582,-12.222 45,-12.222ZM45,0C69.836,0 90,20.164 90,45C90,69.836 69.836,90 45,90C20.164,90 0,69.836 0,45C0,20.164 20.164,0 45,0Z"/>
+    </g>
+    <g id="stroke1" transform="matrix(0.9,0,0,0.9,49.5,49.5)">
+        <circle cx="45" cy="45" r="45" style="fill:none;stroke:white;stroke-width:6.67px;stroke-miterlimit:1.5;"/>
+    </g>
+</svg>

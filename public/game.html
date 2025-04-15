@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labyrinth Game</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="board-wrapper">
+      <div class="corner"></div> <!-- Левый верхний угол -->
+      <div class="top-buttons">
+        <div></div>
+        <div><button class="shift-btn" data-col="1" data-direction="down"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="2" data-direction="down"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="3" data-direction="down"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="4" data-direction="down"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="5" data-direction="down"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div></div>
+      </div>
+      <div class="corner"></div> <!-- Правый верхний угол -->
+      <div class="left-buttons">
+        <div></div>
+        <div><button class="shift-btn" data-row="1" data-direction="right"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="2" data-direction="right"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="3" data-direction="right"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="4" data-direction="right"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="5" data-direction="right"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div></div>
+      </div>
+      <div id="board" class="board"></div>
+      <div class="right-buttons">
+        <div></div>
+        <div><button class="shift-btn" data-row="1" data-direction="left"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="2" data-direction="left"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="3" data-direction="left"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="4" data-direction="left"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-row="5" data-direction="left"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div></div>
+      </div>
+      <div class="corner"></div> <!-- Левый нижний угол -->
+      <div class="bottom-buttons">
+        <div></div>
+        <div><button class="shift-btn" data-col="1" data-direction="up"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="2" data-direction="up"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="3" data-direction="up"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="4" data-direction="up"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div><button class="shift-btn" data-col="5" data-direction="up"><img src="./images/triangle.svg" alt="arrow"></button></div>
+        <div></div>
+      </div>
+      <div class="corner"></div> <!-- Правый нижний угол -->
+    </div>
+    <div class="interface">
+      <div class="player-info" id="playerInfo">
+        <div class="how-many">...</div>
+        <div class="cards">
+          <div class="card"></div>
+        </div>
+      </div>
+      <div class="free-tile-container">
+        <div id="freeTile" class="tile"></div>
+        <button id="rotateBtn" class="rotate-btn"><img src="./images/rotate-cw.svg" alt=""></button>
+      </div>
+    </div>
+    <!-- Добавляем контейнер для меню результатов -->
+    <div id="game-over-overlay" class="game-over-overlay hidden">
+      <div class="game-over-content">
+        <h2>⚜️ Game Over! ⚜️</h2>
+        <div id="rankings">
+          <p id="rank-1">1</p>
+          <p id="rank-2">2</p>
+          <p id="rank-3">3</p>
+          <p id="rank-4">4</p>
+        </div>
+        <a href="http://158.101.168.246/" class="button-main"><img src="./images/arrow-left.svg"><span>Back to home</span></a>
+      </div>
+    </div>
+  </div>
+  <script src="/client.js"></script>
+</body>
+</html>
