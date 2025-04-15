@@ -317,6 +317,8 @@ wss.on('connection', (ws, req) => {
       checkTreasure(player, gameState);
       gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
       broadcastGameState(gameState);
+    } else if (data.type === 'sleepyTab') {
+      broadcastGameState(gameState); // состояние игры для спящей вкладки
     }
   });
 

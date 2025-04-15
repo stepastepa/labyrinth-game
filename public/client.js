@@ -54,7 +54,8 @@ function setupWebSocket(ws) {
 
   ws.onclose = () => {
     console.log('WebSocket connection closed');
-    // Можно добавить логику автоматического переподключения, если нужно
+    // автоматическое переподключение сокетов
+    setTimeout(()=>{ setupWebSocket(ws) }, 1000);
   };
 
   ws.onerror = (error) => {
@@ -65,18 +66,25 @@ function setupWebSocket(ws) {
 // Инициализация WebSocket при первом подключении
 setupWebSocket(ws);
 
-// Переподключение при активации вкладки
+// Переподключение или update при активации вкладки
 document.addEventListener('visibilitychange', () => {
   // if (document.visibilityState === 'visible') {
   //   location.reload(); // слишком жестокий способ...
   // }
 
-  if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
-    console.log('Вкладка была в фоне, переподключаемся...');
-    ws.close(); // Явно закрываем старое соединение, если оно осталось !!!
-    ws = new WebSocket(gameUrl);
-    setupWebSocket(ws); // Привязываем обработчики к новому соединению
+  if (document.visibilityState === 'visible') {
+    console.log('Вкладка проснулась!');
+    ws.send(JSON.stringify({
+      type: 'sleepyTab' // запрашиваем update
+    }));
   }
+
+  // if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
+  //   console.log('Вкладка была в фоне, переподключаемся...');
+  //   ws.close(); // Явно закрываем старое соединение, если оно осталось !!!
+  //   ws = new WebSocket(gameUrl);
+  //   setupWebSocket(ws); // Привязываем обработчики к новому соединению
+  // }
 });
 
 
