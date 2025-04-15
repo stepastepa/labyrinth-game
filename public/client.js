@@ -72,7 +72,7 @@ document.addEventListener('visibilitychange', () => {
   //   location.reload(); // слишком жестокий способ...
   // }
 
-  if (document.visibilityState === 'visible') {
+  if (document.visibilityState === 'visible' && ws.readyState === WebSocket.OPEN) {
     console.log('Вкладка проснулась!');
     ws.send(JSON.stringify({
       type: 'sleepyTab' // запрашиваем update
@@ -195,27 +195,31 @@ function renderBoard(movedPlayer, shiftedPlayers) {
     }
   });
 
-  if (shiftedPlayers && shiftedPlayers.length > 0) {
-    shiftedPlayers.forEach(({ id, path }) => {
-      const playerElement = document.getElementById(`player-${id}`);
-      if (playerElement) {
-        animatePlayer(playerElement, path);
-      }
-    });
-  }
+  if (document.visibilityState === 'visible') { // не анимировать в спящих вкладках, но тогда есть задержка, пока идет анимация, если сразу переключится на спящую вкладку
 
-  if (movedPlayer) {
-    const playerElement = document.getElementById(`player-${movedPlayer.id}`);
-    if (playerElement) {
-      animatePlayer(playerElement, movedPlayer.path, () => {
-        if (localPlayerId === movedPlayer.id) {
-          ws.send(JSON.stringify({
-            type: 'moveAnimationComplete',
-            playerId: localPlayerId
-          }));
+    if (shiftedPlayers && shiftedPlayers.length > 0) {
+      shiftedPlayers.forEach(({ id, path }) => {
+        const playerElement = document.getElementById(`player-${id}`);
+        if (playerElement) {
+          animatePlayer(playerElement, path);
         }
       });
     }
+
+    if (movedPlayer) {
+      const playerElement = document.getElementById(`player-${movedPlayer.id}`);
+      if (playerElement) {
+        animatePlayer(playerElement, movedPlayer.path, () => {
+          if (localPlayerId === movedPlayer.id) {
+            ws.send(JSON.stringify({
+              type: 'moveAnimationComplete',
+              playerId: localPlayerId
+            }));
+          }
+        });
+      }
+    }
+
   }
 
   const localPlayer = gameState.players.find(p => p.id === localPlayerId);
