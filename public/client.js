@@ -70,9 +70,10 @@ document.addEventListener('visibilitychange', () => {
   // if (document.visibilityState === 'visible') {
   //   location.reload(); // слишком жестокий способ...
   // }
-  
-  if (document.visibilityState === 'visible'/* && ws.readyState !== WebSocket.OPEN*/) {
+
+  if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
     console.log('Вкладка была в фоне, переподключаемся...');
+    ws.close(); // Явно закрываем старое соединение, если оно осталось !!!
     ws = new WebSocket(gameUrl);
     setupWebSocket(ws); // Привязываем обработчики к новому соединению
   }
