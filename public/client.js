@@ -313,15 +313,21 @@ function animatePlayer(playerElement, path, callback) {
 }
 
 function showGameOver(winner, rankings) {
-  rankingsElement.innerHTML = '';
-  rankings.forEach((rank, index) => {
-    const rankElement = document.createElement('p');
-    rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.id}.png');"></div></span> Player ${rank.id + 1} - ${rank.cardsLeft} cards`;
-    rankingsElement.appendChild(rankElement);
-  });
-
+  rankingsElement.innerHTML = ''; // стираем весь рейтинг заранее (но можно просто и в HTML его стереть...)
+  // ждем 2сек
   setTimeout(() => {
     gameOverOverlay.classList.remove('hidden');
+    // ждём 1сек
+    setTimeout(() => {
+    // выводим построчно рейтинг
+    rankings.forEach((rank, index) => {
+      setTimeout(() => {
+        const rankElement = document.createElement('p');
+        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.id}.png');"></div></span> Player ${rank.id + 1} - ${rank.cardsLeft} cards`;
+        rankingsElement.appendChild(rankElement);
+      }, index * 500);
+    });
+    }, 750);
   }, 2000);
 }
 
