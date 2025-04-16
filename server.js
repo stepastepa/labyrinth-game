@@ -75,10 +75,10 @@ function initializeGame(gameState, cardCount) {
   gameState.freeTile = gameState.unusedTiles.pop() || { type: 'L', rotation: 0, treasure: null, isStart: false };
 
   gameState.players = [
-    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
-    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
-    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) },
-    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount) }
+    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
+    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
+    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
+    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false }
   ];
 
   console.log('Player 0 cards:', gameState.players[0].cards);
@@ -306,6 +306,9 @@ wss.on('connection', (ws, req) => {
     } else if (data.type === 'movePlayer' && gameState.players[gameState.currentPlayer].id === data.playerId) {
       const player = gameState.players.find(p => p.id === data.playerId);
       if (player && canMove(player.position[0], player.position[1], data.newPosition[0], data.newPosition[1], gameState)) {
+
+        player.isMoving = true; // игрок двигается ??????????
+
         const path = getMovePath(player.position[0], player.position[1], data.newPosition[0], data.newPosition[1], gameState);
         const moveData = { id: player.id, path, newPosition: data.newPosition };
         player.position = data.newPosition;
@@ -314,12 +317,19 @@ wss.on('connection', (ws, req) => {
       }
     } else if (data.type === 'moveAnimationComplete' && gameState.players[gameState.currentPlayer].id === data.playerId) {
       const player = gameState.players.find(p => p.id === data.playerId);
+      
+      player.isMoving = false; // игрок уже не двигается ??????????
+
       checkTreasure(player, gameState);
       gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
       broadcastGameState(gameState);
-    } else if (data.type === 'sleepyTab') {
+    } /* else if (data.type === 'sleepyTab') {
+
+      // надо понимать, что идет анимация и не рисовать того игрока...
+      // ?????????????????????????????????????????????????????????????
+
       broadcastGameState(gameState); // состояние игры для спящей вкладки
-    }
+    }*/
   });
 
   ws.on('close', () => {
