@@ -55,7 +55,7 @@ function setupWebSocket(ws) {
   ws.onclose = () => {
     console.log('WebSocket connection closed');
     // автоматическое переподключение сокетов
-    // setTimeout(()=>{ setupWebSocket(ws) }, 1000);
+    setTimeout(()=>{ setupWebSocket(ws) }, 1000);
   };
 
   ws.onerror = (error) => {
@@ -68,16 +68,16 @@ setupWebSocket(ws);
 
 // Переподключение или update при активации вкладки
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    location.reload(); // слишком жестокий способ...
-  }
-
-  // if (document.visibilityState === 'visible' && ws.readyState === WebSocket.OPEN) {
-  //   console.log('Вкладка проснулась!');
-  //   ws.send(JSON.stringify({
-  //     type: 'sleepyTab' // запрашиваем update
-  //   }));
+  // if (document.visibilityState === 'visible') {
+  //   location.reload(); // слишком жестокий способ...
   // }
+
+  if (document.visibilityState === 'visible' && ws.readyState === WebSocket.OPEN) {
+    console.log('Вкладка проснулась!');
+    ws.send(JSON.stringify({
+      type: 'sleepyTab' // запрашиваем update
+    }));
+  }
 
   // if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
   //   console.log('Вкладка была в фоне, переподключаемся...');
@@ -195,7 +195,7 @@ function renderBoard(movedPlayer, shiftedPlayers) {
     }
   });
 
-  /*if (document.visibilityState === 'visible') {*/
+  if (document.visibilityState === 'visible') {
   // не анимировать в спящих вкладках, но тогда есть задержка, пока идет анимация, если сразу переключится на спящую вкладку
 
     if (shiftedPlayers && shiftedPlayers.length > 0) {
@@ -221,7 +221,7 @@ function renderBoard(movedPlayer, shiftedPlayers) {
       }
     }
 
-  /*}*/
+  }
 
   const localPlayer = gameState.players.find(p => p.id === localPlayerId);
   gameContainer.style.setProperty('--player-color', localPlayer.color);
