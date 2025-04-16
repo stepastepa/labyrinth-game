@@ -784,6 +784,7 @@ select {
 
 .parameters.hidden,
 .button-main.hidden,
-#links.hidden {
+#links.hidden,
+.shift-btn.hidden {
   display: none;
 }

@@ -226,6 +226,12 @@ function renderBoard(movedPlayer, shiftedPlayers) {
   gameContainer.style.setProperty('--player-color', localPlayer.color);
   shiftButtons.forEach(btn => {
     btn.querySelector('img').src = `./images/triangle-${localPlayerId}.svg`;
+
+    // скрываем кнопочки для рядов, если не твой ход
+    btn.classList.add('hidden');
+    if(gameState.currentPlayer === localPlayerId) {
+      btn.classList.remove('hidden');
+    }
   });
 }
 
