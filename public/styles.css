@@ -208,7 +208,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.rotate-btn:hover {
+.rotate-btn:active {
   opacity: 0.5;
 }
 .rotate-btn img {
