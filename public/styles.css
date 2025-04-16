@@ -243,11 +243,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow:
+  /* box-shadow:
     1px 1px 0px 0px rgb(0, 0, 0),
     2px 2px 0px 0px var(--player-color),
     3px 3px 0px 0px rgb(0, 0, 0),
-    4px 4px 0px 0px var(--player-color);
+    4px 4px 0px 0px var(--player-color); */
 }
 .winner .cards {
   box-shadow: none;

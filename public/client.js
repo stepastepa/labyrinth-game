@@ -264,6 +264,15 @@ function renderPlayerInfo() {
     howManyElement.textContent = '0';
     playerInfoElement.classList.add('winner');
   }
+
+  // эффект стопки:
+  const stack = document.querySelector('.cards');
+  let shadows = [];
+  for (let i = 1; i < (+localPlayer.cards.length-1) * 2; i += 2) {
+    shadows.push(`${i}px ${i}px 0px 0px rgb(0, 0, 0)`);
+    shadows.push(`${i + 1}px ${i + 1}px 0px 0px var(--player-color)`);
+  }
+  stack.style.boxShadow = shadows.join(', ');
 }
 
 function animatePlayer(playerElement, path, callback) {
