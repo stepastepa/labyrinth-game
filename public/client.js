@@ -9,6 +9,8 @@ const howManyElement = document.querySelector('.how-many');
 const gameOverOverlay = document.getElementById('game-over-overlay');
 const rankingsElement = document.getElementById('rankings');
 const buttonHome = document.querySelector('.button-home');
+const buttonInfo = document.getElementById('button-info');
+const gameInfoOverlay = document.getElementById('game-info-overlay');
 let gameState = null;
 let localPlayerId = null;
 const pickingPlayers = new Set();
@@ -355,4 +357,12 @@ rotateBtn.addEventListener('click', () => {
     type: 'rotateTile',
     playerId: localPlayerId
   }));
+});
+
+// toggle info menu with rules
+buttonInfo.addEventListener('click', () => {
+  gameInfoOverlay.classList.remove('hidden');
+});
+gameInfoOverlay.addEventListener('click', () => {
+  gameInfoOverlay.classList.add('hidden');
 });

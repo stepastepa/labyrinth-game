@@ -566,7 +566,7 @@ body {
 }
 
 /* Стили для меню результатов */
-.game-over-overlay {
+.menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -582,12 +582,36 @@ body {
   transition: opacity 2s ease;
   z-index: 1000; /* Чтобы перекрывать всё */
 }
-.game-over-overlay:not(.hidden) {
+.menu-overlay:not(.hidden) {
   opacity: 1;
 }
-.game-over-overlay.hidden {
+.menu-overlay.hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+#game-info-overlay {
+  cursor: pointer;
+}
+
+.game-info-content {
+  color: white;
+  width: min(650px, 90%);
+
+  display: flex;
+  flex-direction: column;
+}
+.game-info-content h2 {
+  align-self: center;
+  font-size: min(6vmin, 2rem); /* fluid */
+  margin-bottom: 1rem;
+}
+
+.game-info-content p {
+  font-size: max(3vmin, 0.75rem); /* fluid */
+  line-height: 1.5;
+  text-indent: 2em;
+  margin-bottom: 0.85rem;
 }
 
 .game-over-content {
@@ -680,6 +704,31 @@ body {
   0px -4px 0px white,
   0px 0px 150px 20px var(--player-color)
   ;
+}
+
+.button-round {
+  border: 0.2rem solid var(--player-color);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--player-color);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: scale 0.2s ease;
+}
+.button-round:hover {
+  scale: 1.1;
+}
+.button-round:active {
+  scale: 1.2;
+}
+
+#button-info {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 
 

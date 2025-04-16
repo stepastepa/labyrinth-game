@@ -63,8 +63,8 @@
         <button id="rotateBtn" class="rotate-btn"><img src="./images/rotate-cw.svg" alt=""></button>
       </div>
     </div>
-    <!-- Добавляем контейнер для меню результатов -->
-    <div id="game-over-overlay" class="game-over-overlay hidden">
+    <!-- меню результатов -->
+    <div id="game-over-overlay" class="menu-overlay hidden">
       <div class="game-over-content">
         <h2>⚜️ Game Over! ⚜️</h2>
         <div id="rankings">
@@ -75,6 +75,19 @@
         </div>
         <a href="http://158.101.168.246/" class="button-main"><img src="./images/arrow-left.svg"><span>Back to home</span></a>
       </div>
+    </div>
+    <!-- меню с правилами -->
+    <div id="game-info-overlay" class="menu-overlay hidden">
+      <div class="game-info-content">
+        <h2>⚜️ Rules ⚜️</h2>
+        <p>Первый игрок выбирается случайно. Затем очередь переходит по часовой стрелке по кругу.</p>
+        <p>Активный игрок — выделяется рамкой.</p>
+        <p>Сперва игрок должен поместить плитку на поле. Перед этим её можно поворачивать. После того, как игрок положил плитку, можно кликать на поле, куда именно идти игроку. Затем очередь переходит к следующему игроку.</p>
+        <p>В самом конце игры, если у игрока осталось ноль карточек, то происходит активация портала на его стартовой плитке и для выигрыша надо успеть туда вернуться.</p>
+      </div>
+    </div>
+    <div id="button-info" class="button-round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
     </div>
   </div>
   <script src="/client.js"></script>
