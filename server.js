@@ -16,7 +16,7 @@ function createGame(cardCount) {
     gameId: null,
     board: [],
     players: [],
-    currentPlayer: 0,
+    currentPlayer: Math.floor(Math.random() * 4), // случайный первый игрок (0-3)
     freeTile: null,
     unusedTiles: [],
     hasShifted: false,
@@ -321,6 +321,7 @@ wss.on('connection', (ws, req) => {
       player.isMoving = false; // игрок уже не двигается ??????????
 
       checkTreasure(player, gameState);
+      // очередь переходит к следующему игроку, % помогает зациклить процесс в пределах (0-3)
       gameState.currentPlayer = (gameState.currentPlayer + 1) % gameState.players.length;
       broadcastGameState(gameState);
     } else if (data.type === 'sleepyTab') {
