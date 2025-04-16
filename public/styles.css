@@ -6,6 +6,13 @@
   padding: 0;
 
   -webkit-tap-highlight-color: transparent; /* for chrome blue selection overlay */
+
+  -webkit-user-select: none; /* Для Webkit-браузеров (Chrome, Safari) */
+  -moz-user-select: none;    /* Для Firefox */
+  -ms-user-select: none;     /* Для Internet Explorer/Edge */
+  user-select: none;         /* Стандартное свойство */
+
+  -webkit-touch-callout: none; /* Отключает всплывающее меню при долгом нажатии на iOS и некоторых Android */
 }
 
 html {
@@ -777,9 +784,19 @@ select {
 }
 .link {
   padding: 0.75rem 1rem;
+
+  -webkit-user-select: text; /* Для Webkit-браузеров (Chrome, Safari) */
+  -moz-user-select: text;    /* Для Firefox */
+  -ms-user-select: text;     /* Для Internet Explorer/Edge */
+  user-select: text;         /* Стандартное свойство */
 }
 .link a {
   color: white;
+
+  -webkit-user-select: text; /* Для Webkit-браузеров (Chrome, Safari) */
+  -moz-user-select: text;    /* Для Firefox */
+  -ms-user-select: text;     /* Для Internet Explorer/Edge */
+  user-select: text;         /* Стандартное свойство */
 }
 
 .parameters.hidden,
