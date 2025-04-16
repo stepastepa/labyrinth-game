@@ -268,7 +268,11 @@ function renderPlayerInfo() {
   // эффект стопки:
   const stack = document.querySelector('.cards');
   let shadows = [];
-  for (let i = 1; i < (+localPlayer.cards.length-1) * 2; i += 2) {
+  let howManyToDraw = +localPlayer.cards.length;
+  if(howManyToDraw > 5) {
+    howManyToDraw = 5; // ограничиваем величину стопки
+  }
+  for (let i = 1; i < (howManyToDraw-1) * 2; i += 2) {
     shadows.push(`${i}px ${i}px 0px 0px rgb(0, 0, 0)`);
     shadows.push(`${i + 1}px ${i + 1}px 0px 0px var(--player-color)`);
   }
