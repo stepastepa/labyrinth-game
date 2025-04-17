@@ -315,7 +315,6 @@ function animatePlayer(playerElement, path, callback) {
 }
 
 function showGameOver(winner, rankings) {
-  let heros = ['Golden Knight', 'Red Pirate', 'Blue Wizard', 'Green Zombie'];
   rankingsElement.innerHTML = ''; // стираем весь рейтинг заранее (но можно просто и в HTML его стереть...)
   // ждем 2сек
   setTimeout(() => {
@@ -326,7 +325,7 @@ function showGameOver(winner, rankings) {
     rankings.forEach((rank, index) => {
       setTimeout(() => {
         const rankElement = document.createElement('p');
-        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.id}.png');"></div></span> ${heros[rank.id]} - ${rank.cardsLeft}`;
+        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.id}.png');"></div></span> ${rank.hero} - ${rank.cardsLeft}`;
         rankingsElement.appendChild(rankElement);
       }, index * 500);
     });

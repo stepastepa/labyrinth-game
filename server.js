@@ -75,10 +75,10 @@ function initializeGame(gameState, cardCount) {
   gameState.freeTile = gameState.unusedTiles.pop() || { type: 'L', rotation: 0, treasure: null, isStart: false };
 
   gameState.players = [
-    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
-    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
-    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false },
-    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false }
+    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Golden Knight' },
+    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Red Pirate' },
+    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Blue Wizard' },
+    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Green Zombie' }
   ];
 
   console.log('Player 0 cards:', gameState.players[0].cards);
@@ -252,7 +252,7 @@ function checkTreasure(player, gameState) {
   // была раньше ошибка, когда у первого 0 был... он как false воспринимался и не было финала игры...
   if (tile.startPlayer != null && tile.startPlayer === player.id && player.cards.length === 0) {
     const rankings = gameState.players
-        .map(p => ({ id: p.id, cardsLeft: p.cards.length }))
+        .map(p => ({ id: p.id, cardsLeft: p.cards.length, hero: p.hero }))
         .sort((a, b) => a.cardsLeft - b.cardsLeft);
       // бывают случаи, когда у двоих игроково по ноль карт и надо в рейтинге поднять на первое место того, кто первый прийдет на свою стартовую плитку!!!
       const index = rankings.findIndex(p => p.id === player.id);
