@@ -17,10 +17,12 @@ const pickingPlayers = new Set();
 
 const urlParams = new URLSearchParams(window.location.search);
 const gameId = urlParams.get('game');
-const playerId = parseInt(urlParams.get('player'));
-const cardCount = urlParams.get('cards');
+const playerId = parseInt(urlParams.get('hero'));
+const numPlayers = parseInt(urlParams.get('players'));
+const cardCount = parseInt(urlParams.get('cards'));
 
-const gameUrl = `ws://${location.host}?game=${gameId}&player=${playerId}&cards=${cardCount}`; // -- auto IP -- //
+const gameUrl = `ws://${location.host}?game=${gameId}&hero=${playerId}&players=${numPlayers}&cards=${cardCount}`; // -- auto IP -- //
+
 let ws = new WebSocket(gameUrl);
 
 function setupWebSocket(ws) {
@@ -178,7 +180,7 @@ function renderBoard(movedPlayer, shiftedPlayers) {
     playerElement.classList.add('player');
     playerElement.id = `player-${player.id}`;
     const sprite = document.createElement('div');
-    sprite.style.backgroundImage = `url('./images/player-${player.id}.png')`;
+    sprite.style.backgroundImage = `url('./images/player-${player.textureId}.png')`;
     playerElement.appendChild(sprite);
 
     if (player.id === gameState.currentPlayer) {
@@ -193,7 +195,7 @@ function renderBoard(movedPlayer, shiftedPlayers) {
 
     // изменяем стартовую плитку, если игрок собрал все сокровища
     if (player.cards.length === 0) {
-      document.querySelector(`.start-${player.id}`).classList.add('activated');
+      document.querySelector(`.start-${player.textureId}`).classList.add('activated');
     }
   });
 
@@ -228,7 +230,7 @@ function renderBoard(movedPlayer, shiftedPlayers) {
   const localPlayer = gameState.players.find(p => p.id === localPlayerId);
   gameContainer.style.setProperty('--player-color', localPlayer.color);
   shiftButtons.forEach(btn => {
-    btn.querySelector('img').src = `./images/triangle-${localPlayerId}.svg`;
+    btn.querySelector('img').src = `./images/triangle-${localPlayer.textureId}.svg`;
 
     // скрываем кнопочки для рядов, если не твой ход
     btn.classList.add('hidden');
@@ -325,7 +327,7 @@ function showGameOver(winner, rankings) {
     rankings.forEach((rank, index) => {
       setTimeout(() => {
         const rankElement = document.createElement('p');
-        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.id}.png');"></div></span> ${rank.hero} - ${rank.cardsLeft}`;
+        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.texture}.png');"></div></span> ${rank.hero} - ${rank.cardsLeft}`;
         rankingsElement.appendChild(rankElement);
       }, index * 500);
     });

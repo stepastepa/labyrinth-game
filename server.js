@@ -11,12 +11,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const games = new Map();
 
-function createGame(cardCount) {
+function createGame(cardCount, numPlayers) {
   const gameState = {
     gameId: null,
     board: [],
     players: [],
-    currentPlayer: Math.floor(Math.random() * 4), // случайный первый игрок (0-3)
+    currentPlayer: Math.floor(Math.random() * numPlayers), // случайный первый игрок
     freeTile: null,
     unusedTiles: [],
     hasShifted: false,
@@ -26,21 +26,15 @@ function createGame(cardCount) {
       'mirror', 'compass', 'amulet', 'torch'
     ]
   };
-  initializeGame(gameState, cardCount);
+  initializeGame(gameState, cardCount, numPlayers);
   return gameState;
 }
 
-function initializeGame(gameState, cardCount) {
-  console.log('Raw cardCount input:', cardCount);
-  cardCount = parseInt(cardCount, 10);
-  if (isNaN(cardCount) || cardCount <= 0 || cardCount > gameState.allCards.length) {
-    console.log(`Invalid cardCount (${cardCount}), defaulting to 5`);
-    cardCount = 5;
-  }
-  console.log(`Initializing game with cardCount: ${cardCount}`);
+function initializeGame(gameState, cardCount, numPlayers) {
 
   gameState.board = Array(7).fill().map(() => Array(7).fill(null));
   const treasures = gameState.allCards.slice();
+
   // порядок цветов для игроков по часовой стрелке !!!
   const playerColors = ['orange', 'crimson', 'royalblue', '#35b83f'];
 
@@ -74,14 +68,41 @@ function initializeGame(gameState, cardCount) {
 
   gameState.freeTile = gameState.unusedTiles.pop() || { type: 'L', rotation: 0, treasure: null, isStart: false };
 
+  // создаем исходные данные для игроков
   gameState.players = [
-    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Golden Knight' },
-    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Red Pirate' },
-    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Blue Wizard' },
-    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Green Zombie' }
+    { id: 0, position: [0, 0], treasures: [], color: playerColors[0], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Golden Knight', textureId: 0 },
+    { id: 1, position: [6, 0], treasures: [], color: playerColors[1], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Red Pirate', textureId: 1 },
+    { id: 2, position: [6, 6], treasures: [], color: playerColors[2], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Blue Wizard', textureId: 2 },
+    { id: 3, position: [0, 6], treasures: [], color: playerColors[3], cards: shuffleArray([...gameState.allCards]).slice(0, cardCount), isMoving: false, hero: 'Green Zombie', textureId: 3 }
   ];
 
-  console.log('Player 0 cards:', gameState.players[0].cards);
+  // функции для перемешивания и подрезания массива с игроками
+  function shuffle(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
+
+  function trimPlayers(players, desiredCount) {
+    if (desiredCount >= players.length) return players;
+    // Получаем случайные индексы игроков, которых нужно оставить
+    const indices = players.map((_, i) => i);
+    const keptIndices = shuffle(indices).slice(0, desiredCount).sort((a, b) => a - b);
+    // Оставляем нужных игроков и переустанавливаем id
+    const newPlayers = keptIndices.map((originalIndex, newIndex) => {
+      const originalPlayer = players[originalIndex];
+      return {
+        ...originalPlayer,
+        id: newIndex
+      };
+    });
+    return newPlayers;
+  }
+
+  // подрезаем массив с игроками до нужного размера
+  gameState.players = trimPlayers(gameState.players, numPlayers);
+
   gameState.hasShifted = false;
 }
 
@@ -250,9 +271,9 @@ function checkTreasure(player, gameState) {
     // }
   }
   // была раньше ошибка, когда у первого 0 был... он как false воспринимался и не было финала игры...
-  if (tile.startPlayer != null && tile.startPlayer === player.id && player.cards.length === 0) {
+  if (tile.startPlayer != null && tile.startPlayer === player.textureId && player.cards.length === 0) {
     const rankings = gameState.players
-        .map(p => ({ id: p.id, cardsLeft: p.cards.length, hero: p.hero }))
+        .map(p => ({ id: p.id, cardsLeft: p.cards.length, hero: p.hero, texture: p.textureId }))
         .sort((a, b) => a.cardsLeft - b.cardsLeft);
       // бывают случаи, когда у двоих игроково по ноль карт и надо в рейтинге поднять на первое место того, кто первый прийдет на свою стартовую плитку!!!
       const index = rankings.findIndex(p => p.id === player.id);
@@ -268,12 +289,11 @@ wss.on('connection', (ws, req) => {
   console.log('New client connected');
   const urlParams = new URLSearchParams(req.url.split('?')[1]);
   const gameId = urlParams.get('game');
-  const playerId = parseInt(urlParams.get('player'));
-  const rawCardCount = urlParams.get('cards');
-  const cardCount = parseInt(rawCardCount, 10);
+  const playerId = parseInt(urlParams.get('hero'));
+  const numPlayers = parseInt(urlParams.get('players'));
+  const cardCount = parseInt(urlParams.get('cards'));
 
-  console.log(`Raw cards param: ${rawCardCount}`);
-  console.log(`Game ID: ${gameId}, Player ID: ${playerId}, Card Count: ${cardCount}`);
+  console.log(`Game ID: ${gameId}, Player ID: ${playerId}, Number of Players: ${numPlayers}, Card Count: ${cardCount}`);
 
   if (!gameId || isNaN(playerId) || playerId < 0 || playerId > 3) {
     ws.close(4000, 'Invalid game or player ID');
@@ -283,7 +303,7 @@ wss.on('connection', (ws, req) => {
   // --- надо подчищать созданные давно игры, которые уже неактивные !!!
   let gameState = games.get(gameId);
   if (!gameState) {
-    gameState = createGame(cardCount);
+    gameState = createGame(cardCount, numPlayers);
     gameState.gameId = gameId;
     games.set(gameId, gameState);
   }

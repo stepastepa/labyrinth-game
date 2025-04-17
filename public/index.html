@@ -10,13 +10,20 @@
   <div class="menu">
     <h1>⚜️ Labyrinth ⚜️</h1>
     <div class="parameters">
-      <label for="cardCount">How many cards:</label>
+      <label for="numPlayers">Players:</label>
+      <select id="numPlayers">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4" selected>4</option>
+      </select>
+
+      <label for="cardCount">Cards:</label>
       <select id="cardCount">
         <option value="1">1</option>
-        <option value="5">5</option>
+        <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="15">15</option>
-        <option value="24" selected>24</option>
+        <option value="24">24</option>
       </select>
     </div>
     <button class="button-main create" onclick="generateLinks()">
@@ -49,11 +56,12 @@
     function generateLinks() {
       toggleInterface();
       const cardCount = document.getElementById('cardCount').value;
+      const numPlayers = document.getElementById('numPlayers').value;
       const gameId = Math.random().toString(36).substring(2, 8);
       
       links.innerHTML = '';
-      for (let i = 0; i < 4; i++) {
-        const link = `${window.location.origin}/game.html?game=${gameId}&player=${i}&cards=${cardCount}`;
+      for (let i = 0; i < +numPlayers; i++) {
+        const link = `${window.location.origin}/game.html?game=${gameId}&hero=${i}&players=${numPlayers}&cards=${cardCount}`;
         links.innerHTML += `<div class="link player-${i}">${heros[i]} - <a href="${link}">${link}</a></div>`;
       }
     }
