@@ -44,15 +44,17 @@
       links.classList.toggle('hidden');
     }
 
+    let heros = ['⚔️', '💀', '🔮', '🧪'];
+
     function generateLinks() {
       toggleInterface();
       const cardCount = document.getElementById('cardCount').value;
-      const gameId = Math.random().toString(36).substring(2, 10);
+      const gameId = Math.random().toString(36).substring(2, 8);
       
       links.innerHTML = '';
       for (let i = 0; i < 4; i++) {
         const link = `${window.location.origin}/game.html?game=${gameId}&player=${i}&cards=${cardCount}`;
-        links.innerHTML += `<div class="link">Player ${i + 1}: <a href="${link}">${link}</a></div>`;
+        links.innerHTML += `<div class="link player-${i}">${heros[i]} - <a href="${link}">${link}</a></div>`;
       }
     }
 

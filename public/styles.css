@@ -833,6 +833,7 @@ select {
 }
 .link {
   padding: 0.75rem 1rem;
+  text-align: center;
 
   -webkit-user-select: text; /* Для Webkit-браузеров (Chrome, Safari) */
   -moz-user-select: text;    /* Для Firefox */
@@ -840,12 +841,25 @@ select {
   user-select: text;         /* Стандартное свойство */
 }
 .link a {
-  color: white;
+  color: inherit;
 
   -webkit-user-select: text; /* Для Webkit-браузеров (Chrome, Safari) */
   -moz-user-select: text;    /* Для Firefox */
   -ms-user-select: text;     /* Для Internet Explorer/Edge */
   user-select: text;         /* Стандартное свойство */
+}
+
+.link.player-0 {
+  color: var(--color-0);
+}
+.link.player-1 {
+  color: var(--color-1);
+}
+.link.player-2 {
+  color: var(--color-2);
+}
+.link.player-3 {
+  color: var(--color-3);
 }
 
 .parameters.hidden,
