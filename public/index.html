@@ -9,22 +9,25 @@
 <body class="container">
   <div class="menu">
     <h1>⚜️ Labyrinth ⚜️</h1>
-    <div class="parameters">
-      <label for="numPlayers">Players:</label>
-      <select id="numPlayers">
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4" selected>4</option>
-      </select>
-
-      <label for="cardCount">Cards:</label>
-      <select id="cardCount">
-        <option value="1">1</option>
-        <option value="5" selected>5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="24">24</option>
-      </select>
+    <div class="options-container">
+      <div class="players-options">
+        <label for="numPlayers">Players:</label>
+        <select id="numPlayers">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+        </select>
+      </div>
+      <div class="cards-options">
+        <label for="cardCount">Cards:</label>
+        <select id="cardCount">
+          <option value="1">1</option>
+          <option value="5" selected>5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="24">24</option>
+        </select>
+      </div>
     </div>
     <button class="button-main create" onclick="generateLinks()">
       <span>Create game</span>
@@ -39,19 +42,17 @@
   
   <script>
 
-    const parameters = document.querySelector('.parameters');
+    const options = document.querySelector('.options-container');
     const buttonCreate = document.querySelector('.create');
     const buttonBack = document.querySelector('.back');
     const links = document.querySelector('#links');
 
     function toggleInterface() {
-      parameters.classList.toggle('hidden');
+      options.classList.toggle('hidden');
       buttonCreate.classList.toggle('hidden');
       buttonBack.classList.toggle('hidden');
       links.classList.toggle('hidden');
     }
-
-    let heros = ['⚔️', '💀', '🔮', '🧪'];
 
     function generateLinks() {
       toggleInterface();
@@ -62,11 +63,48 @@
       links.innerHTML = '';
       for (let i = 0; i < +numPlayers; i++) {
         const link = `${window.location.origin}/game.html?game=${gameId}&hero=${i}&players=${numPlayers}&cards=${cardCount}`;
-        links.innerHTML += `<div class="link player-${i}">${heros[i]} - <a href="${link}">${link}</a></div>`;
+        links.innerHTML += `<div class="link player-${i}"><a href="${link}"><img src="./images/user.svg">${i+1} Player</a><span class="icon-link copy-button" id="copy-${i}"><img src="./images/copy.svg"></span></div>`;
       }
+
+      addCopyFeature();
     }
 
     buttonBack.addEventListener('click', toggleInterface);
+
+
+
+    // функция и способ для копирования, очень старый и ненадежный:
+
+    function copyFallback(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+
+      // Не отображать элемент
+      textarea.style.position = 'fixed';
+      textarea.style.top = '-9999px';
+
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        const success = document.execCommand('copy');
+        console.log(success ? 'Copied!' : 'Unable to copy.');
+      } catch (err) {
+        console.error('Copy Error:', err);
+      }
+
+      document.body.removeChild(textarea);
+    }
+
+    function addCopyFeature() {
+      const copyButtons = document.querySelectorAll('.copy-button');
+      for (let i = 0; i < copyButtons.length; i++) {
+        document.getElementById(`copy-${i}`).addEventListener('click', () => {
+          copyFallback(document.querySelector(`.player-${i} a`).href);
+        });
+      }
+    }
 
   </script>
 </body>
