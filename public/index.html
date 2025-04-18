@@ -63,7 +63,17 @@
       links.innerHTML = '';
       for (let i = 0; i < +numPlayers; i++) {
         const link = `${window.location.origin}/game.html?game=${gameId}&hero=${i}&players=${numPlayers}&cards=${cardCount}`;
-        links.innerHTML += `<div class="link player-${i}"><a href="${link}"><img src="./images/user.svg">${i+1} Player</a><span class="icon-link copy-button" id="copy-${i}"><img src="./images/copy.svg"></span></div>`;
+        links.innerHTML += `
+        <div class="link player-${i}">
+          <a href="${link}"><img src="./images/user.svg">${i+1} Player</a>
+          <a href="${link}" class="icon-link button-square">
+            <img src="./images/arrow-right-thick.svg">
+          </a>
+          <span class="icon-link button-square copy-button" id="copy-${i}">
+            <img src="./images/copy-thick.svg">
+          </span>
+        </div>
+        `;
       }
 
       addCopyFeature();

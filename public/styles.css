@@ -876,13 +876,13 @@ select {
   justify-content: center;
   align-items: center;
 }
-.copy-button {
-  --bg-color: hsla(0deg, 0%, 100%, 0.5);
+.button-square {
+  --bg-color: hsla(0, 0%, 100%, 0.3);
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.6;
   /* border: 2px solid hsla(0deg, 0%, 100%, 1); */
   background-color: var(--bg-color);
-  padding: 0.35rem;
+  padding: 0.5rem;
   border-radius: 0.25rem;
   margin-top: -1rem;
   margin-bottom: -1rem;
@@ -892,12 +892,15 @@ select {
   -4px 0 0 var(--bg-color),
   0 -4px 0 var(--bg-color)
   ; */
+  
+  transition: scale 0.2s ease;
 }
-.copy-button:hover {
-  opacity: 0.75;
+.button-square:hover {
+  opacity: 0.85;
 }
-.copy-button:active {
+.button-square:active {
   opacity: 1;
+  scale: 1.1;
 }
 .icon-link img {
   width: 1rem;
