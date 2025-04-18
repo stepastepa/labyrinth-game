@@ -107,14 +107,28 @@
       document.body.removeChild(textarea);
     }
 
+    function showMessage(text, target) {
+      const tooltip = document.createElement('span');
+      tooltip.className = 'tooltip';
+      tooltip.textContent = text;
+      let closestLink = target.closest('.link');
+      closestLink.appendChild(tooltip);
+
+      // удаляем всплывающее сообщение через 2 секунды
+      setTimeout(() => {
+        tooltip.remove();
+      }, 2000);
+    }
+
     function addCopyFeature() {
       const copyButtons = document.querySelectorAll('.copy-button');
       for (let i = 0; i < copyButtons.length; i++) {
-        document.getElementById(`copy-${i}`).addEventListener('click', () => {
+        document.getElementById(`copy-${i}`).addEventListener('click', (e) => {
           copyFallback(document.querySelector(`.player-${i} a`).href);
+          showMessage('copied!', e.target);
         });
       }
-    }
+    } 
 
   </script>
 </body>
