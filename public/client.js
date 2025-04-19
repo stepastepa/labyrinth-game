@@ -336,7 +336,7 @@ function showGameOver(winner, rankings) {
       if (index === 0) { prize = ' 🏅'; }
       setTimeout(() => {
         const rankElement = document.createElement('p');
-        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.texture}.png');"></div></span> ${rank.hero} - ${prize || rank.cardsLeft}`;
+        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.texture}.png');"></div></span> ${rank.hero} - ${prize || rank.treasuresCollected}`;
         rankingsElement.appendChild(rankElement);
       }, index * 500);
     });

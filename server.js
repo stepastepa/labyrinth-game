@@ -273,7 +273,7 @@ function checkTreasure(player, gameState) {
   // была раньше ошибка, когда у первого 0 был... он как false воспринимался и не было финала игры...
   if (tile.startPlayer != null && tile.startPlayer === player.textureId && player.cards.length === 0) {
     const rankings = gameState.players
-        .map(p => ({ id: p.id, cardsLeft: p.cards.length, hero: p.hero, texture: p.textureId }))
+        .map(p => ({ id: p.id, cardsLeft: p.cards.length, treasuresCollected: p.treasures.length, hero: p.hero, texture: p.textureId }))
         .sort((a, b) => a.cardsLeft - b.cardsLeft);
       // бывают случаи, когда у двоих игроково по ноль карт и надо в рейтинге поднять на первое место того, кто первый прийдет на свою стартовую плитку!!!
       const index = rankings.findIndex(p => p.id === player.id);
