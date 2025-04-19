@@ -149,16 +149,23 @@ function renderBoard(movedPlayer, shiftedPlayers) {
         tile.appendChild(treasureSpan);
       }
 
-      // создаём стартовые плитки для каждого игрока
+      // создаём стартовые плитки для существующих игроков
       if (tileData.isStart && tileData.startColor) {
-        const indicator = document.createElement('div');
-        indicator.classList.add('start-indicator', `start-${tileData.startPlayer}`);
-        tile.appendChild(indicator);
+        for (let player of gameState.players) {
+          if (tileData.startPlayer === player.textureId) {
+            console.log(`portal ${tileData.startPlayer} is skipped.`);
+          
+            const indicator = document.createElement('div');
+            indicator.classList.add('start-indicator', `start-${tileData.startPlayer}`);
+            tile.appendChild(indicator);
 
-        // additional motion effects
-        const fx = document.createElement('div');
-        fx.classList.add('effects');
-        indicator.appendChild(fx);
+            // additional motion effects
+            const fx = document.createElement('div');
+            fx.classList.add('effects');
+            indicator.appendChild(fx);
+
+          }
+        }
       }
 
       tile.addEventListener('click', () => {
