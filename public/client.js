@@ -272,7 +272,7 @@ function renderPlayerInfo() {
   if (localPlayer.cards.length > 0) {
     topCard.textContent = treasureEmojis[localPlayer.cards[0]] || '?';
   } else {
-    topCard.textContent = '🏆';
+    topCard.innerHTML = `<img src="./images/start-${localPlayer.textureId}.svg">`;
   }
 
   if (localPlayer.cards.length > 0) {
