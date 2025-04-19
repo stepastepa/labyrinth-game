@@ -332,9 +332,11 @@ function showGameOver(winner, rankings) {
     setTimeout(() => {
     // выводим построчно рейтинг
     rankings.forEach((rank, index) => {
+      let prize = '';
+      if (index === 0) { prize = ' 🏅'; }
       setTimeout(() => {
         const rankElement = document.createElement('p');
-        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.texture}.png');"></div></span> ${rank.hero} - ${rank.cardsLeft}`;
+        rankElement.innerHTML = `${index + 1}. <span class="player"><div style="background-image: url('./images/player-${rank.texture}.png');"></div></span> ${rank.hero} - ${prize || rank.cardsLeft}`;
         rankingsElement.appendChild(rankElement);
       }, index * 500);
     });
