@@ -7,17 +7,21 @@
 // window.addEventListener('resize', updateWideAspectClass);
 // window.addEventListener('orientationchange', updateWideAspectClass);
 
+const testQuery = '(min-aspect-ratio: 0.84/1)';
+const supportsAspectRatio = matchMedia(testQuery).media === testQuery;
 
-function applyWideAspectRatioClass(entry) {
-  const rect = entry.contentRect;
-  const ratio = rect.width / rect.height;
-  document.documentElement.classList.toggle('wide-aspect-ratio', ratio >= 0.84);
-}
-
-const observer = new ResizeObserver(entries => {
-for (let entry of entries) {
-    applyWideAspectRatioClass(entry);
+if (!supportsAspectRatio) {
+  function applyWideAspectRatioClass(entry) {
+    const rect = entry.contentRect;
+    const ratio = rect.width / rect.height;
+    document.documentElement.classList.toggle('wide-aspect-ratio', ratio >= 0.84);
   }
-});
 
-observer.observe(document.documentElement);
+  const observer = new ResizeObserver(entries => {
+  for (let entry of entries) {
+      applyWideAspectRatioClass(entry);
+    }
+  });
+
+  observer.observe(document.documentElement);
+}
