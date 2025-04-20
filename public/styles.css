@@ -777,6 +777,50 @@ body {
   }
 }
 
+/* ======== iOS 15 fallback (instead of min-aspect-ratio) ======== */
+
+.wide-aspect-ratio .game-container {
+  flex-direction: row;
+  align-items: center;
+}
+
+.wide-aspect-ratio .board-wrapper {
+  width: 80vw;
+  height: 80vw;
+  max-height: 100dvh;
+  max-width: 100dvh;
+}
+
+.wide-aspect-ratio .interface {
+  width: 20vw;
+  max-width: 150px;
+  height: 100dvh;
+  max-height: 100dvh;
+  gap: 1.5rem;
+  flex-direction: column;
+}
+
+.wide-aspect-ratio .free-tile-container {
+  flex-direction: column;
+  height: unset;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.wide-aspect-ratio .player-info {
+  width: 100%;
+  height: unset;
+}
+
+.wide-aspect-ratio .cards {
+  width: unset;
+  height: 100%;
+  aspect-ratio: 0.7 / 1;
+}
+
+.wide-aspect-ratio .how-many {
+  font-size: 0.9rem;
+}
 
 /* ======== index.html ======== */
 
