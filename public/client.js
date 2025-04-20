@@ -58,7 +58,6 @@ function setupWebSocket(ws) {
 
   ws.onclose = () => {
     console.log('WebSocket connection closed');
-    // автоматическое переподключение сокетов
     setTimeout(()=>{ setupWebSocket(ws) }, 1000);
   };
 
@@ -82,13 +81,6 @@ document.addEventListener('visibilitychange', () => {
       type: 'sleepyTab' // запрашиваем update
     }));
   }
-
-  // if (document.visibilityState === 'visible' && ws.readyState !== WebSocket.OPEN) {
-  //   console.log('Вкладка была в фоне, переподключаемся...');
-  //   ws.close(); // Явно закрываем старое соединение, если оно осталось !!!
-  //   ws = new WebSocket(gameUrl);
-  //   setupWebSocket(ws); // Привязываем обработчики к новому соединению
-  // }
 });
 
 
@@ -153,8 +145,6 @@ function renderBoard(movedPlayer, shiftedPlayers) {
       if (tileData.isStart && tileData.startColor) {
         for (let player of gameState.players) {
           if (tileData.startPlayer === player.textureId) {
-            console.log(`portal ${tileData.startPlayer} is skipped.`);
-          
             const indicator = document.createElement('div');
             indicator.classList.add('start-indicator', `start-${tileData.startPlayer}`);
             tile.appendChild(indicator);
