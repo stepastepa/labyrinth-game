@@ -267,9 +267,14 @@ body {
   background-position: center;
   background-size: 100% 100%;
   image-rendering: pixelated;
+
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.card img {
+  flex: 1 1 0;
+  /* width: 100%; */
 }
 
 .how-many {
