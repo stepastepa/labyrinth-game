@@ -7,11 +7,10 @@
 // window.addEventListener('resize', updateWideAspectClass);
 // window.addEventListener('orientationchange', updateWideAspectClass);
 
+const query = '(min-aspect-ratio: 0.84/1)';
+const media = window.matchMedia(query);
 
-const testQuery = '(min-aspect-ratio: 0.84/1)';
-const supportsAspectRatio = matchMedia(testQuery).media === testQuery;
-
-if (!supportsAspectRatio && 'ResizeObserver' in window) {
+if (media.matches !== (window.innerWidth / window.innerHeight >= 0.84)) {
   const observer = new ResizeObserver(entries => {
     for (let entry of entries) {
       const rect = entry.contentRect;
