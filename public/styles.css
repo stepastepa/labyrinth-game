@@ -984,6 +984,21 @@ select {
 
 /* === tiles animation ===*/
 
+/* Начальные состояния (старые браузеры) */
+.tile.shift-left-start {
+  transform: translateX(100%);
+}
+.tile.shift-right-start {
+  transform: translateX(-100%);
+}
+.tile.shift-up-start {
+  transform: translateY(100%);
+}
+.tile.shift-down-start {
+  transform: translateY(-100%);
+}
+
+/* Конечные состояния с переходом */
 .tile.shift-left {
   transform: translateX(0);
   transition: transform 0.5s ease;

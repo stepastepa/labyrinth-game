@@ -263,23 +263,54 @@ function animateTileShift(shiftData) {
     }
   }
 
-  // Применяем начальное смещение для анимации плиток
-  tilesToAnimate.forEach(({ tile }) => {
-    if (direction === 'left') {
-      tile.classList.add('shift-left');
-    } else if (direction === 'right') {
-      tile.classList.add('shift-right');
-    } else if (direction === 'up') {
-      tile.classList.add('shift-up');
-    } else if (direction === 'down') {
-      tile.classList.add('shift-down');
-    }
-  });
+  // поддерживает ли браузер starting-style
+  const supportsStartingStyle = CSS.supports('selector(@starting-style)');
 
-  // Удаляем классы анимации после завершения
+  function addAnimStyles() {
+    // Применяем начальное смещение для анимации плиток
+    tilesToAnimate.forEach(({ tile }) => {
+      if (direction === 'left') {
+        tile.classList.add('shift-left');
+      } else if (direction === 'right') {
+        tile.classList.add('shift-right');
+      } else if (direction === 'up') {
+        tile.classList.add('shift-up');
+      } else if (direction === 'down') {
+        tile.classList.add('shift-down');
+      }
+    });
+  }
+
+  function addStartingAnimStyles() {
+    // Применяем начальное смещение для анимации плиток
+    tilesToAnimate.forEach(({ tile }) => {
+      if (direction === 'left') {
+        tile.classList.add('shift-left-start');
+      } else if (direction === 'right') {
+        tile.classList.add('shift-right-start');
+      } else if (direction === 'up') {
+        tile.classList.add('shift-up-start');
+      } else if (direction === 'down') {
+        tile.classList.add('shift-down-start');
+      }
+    });
+  }
+
+  if (!supportsStartingStyle) {
+    addStartingAnimStyles();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        addAnimStyles();
+      });
+    });
+  } else {
+    addAnimStyles();
+  }
+
+  // Удаляем все-все классы анимации после завершения
   setTimeout(() => {
     tilesToAnimate.forEach(({ tile }) => {
-      tile.classList.remove('shift-left', 'shift-right', 'shift-up', 'shift-down');
+      tile.classList.remove('shift-left', 'shift-right', 'shift-up', 'shift-down', 'shift-left-start', 'shift-right-start', 'shift-up-start', 'shift-down-start');
     });
   }, 500); // 5сек
 }
