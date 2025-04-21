@@ -21,6 +21,8 @@ const playerId = parseInt(urlParams.get('hero'));
 const numPlayers = parseInt(urlParams.get('players'));
 const cardCount = parseInt(urlParams.get('cards'));
 
+let oldBoard = null; // Для хранения предыдущего состояния доски
+
 const gameUrl = `ws://${location.host}?game=${gameId}&hero=${playerId}&players=${numPlayers}&cards=${cardCount}`; // -- auto IP -- //
 
 let ws = new WebSocket(gameUrl);
@@ -41,7 +43,7 @@ function setupWebSocket(ws) {
       renderPlayerInfo();
     } else if (data.type === 'update') {
       gameState = data.gameState;
-      renderBoard(data.movedPlayer, data.shiftedPlayers);
+      renderBoard(data.movedPlayer, data.shiftData);
       renderFreeTile();
       renderPlayerInfo();
       if (data.gameOver) {
@@ -109,10 +111,15 @@ function triggerPickingEffect(playerId) {
   }, 500);
 }
 
-function renderBoard(movedPlayer, shiftedPlayers) {
+function renderBoard(movedPlayer, shiftData) {
   if (!gameState || !gameState.board) {
     console.log('Game state not ready yet');
     return;
+  }
+
+  // Сохраняем старое состояние доски перед обновлением
+  if (gameState.board) {
+    oldBoard = gameState.board.map(row => row.map(tile => ({ ...tile })));
   }
 
   boardElement.innerHTML = '';
@@ -196,17 +203,11 @@ function renderBoard(movedPlayer, shiftedPlayers) {
     }
   });
 
+  // делаем анимацию сдвигание плиток
+  animateTileShift(shiftData);
+
   if (document.visibilityState === 'visible') {
   // не анимировать в спящих вкладках, но тогда есть задержка, пока идет анимация, если сразу переключится на спящую вкладку
-
-    if (shiftedPlayers && shiftedPlayers.length > 0) {
-      shiftedPlayers.forEach(({ id, path }) => {
-        const playerElement = document.getElementById(`player-${id}`);
-        if (playerElement) {
-          animatePlayer(playerElement, path);
-        }
-      });
-    }
 
     if (movedPlayer) {
       const playerElement = document.getElementById(`player-${movedPlayer.id}`);
@@ -221,7 +222,6 @@ function renderBoard(movedPlayer, shiftedPlayers) {
         });
       }
     }
-
   }
 
   const localPlayer = gameState.players.find(p => p.id === localPlayerId);
@@ -236,6 +236,54 @@ function renderBoard(movedPlayer, shiftedPlayers) {
     }
   });
 }
+
+
+// анимация сдвигания плиток
+function animateTileShift(shiftData) {
+  let row, col, direction = '';
+  if (shiftData) {
+    if(shiftData.row) row = shiftData.row;
+    if(shiftData.col) col = shiftData.col;
+    direction = shiftData.direction;
+  }
+
+  // Определяем, какие плитки анимировать
+  let tilesToAnimate = [];
+  if (row !== undefined) {
+    // Сдвиг ряда
+    for (let x = 0; x < 7; x++) {
+      const tile = boardElement.children[row * 7 + x];
+      if (tile) tilesToAnimate.push({ tile, x, y: row });
+    }
+  } else if (col !== undefined) {
+    // Сдвиг столбца
+    for (let y = 0; y < 7; y++) {
+      const tile = boardElement.children[y * 7 + col];
+      if (tile) tilesToAnimate.push({ tile, x: col, y });
+    }
+  }
+
+  // Применяем начальное смещение для анимации плиток
+  tilesToAnimate.forEach(({ tile }) => {
+    if (direction === 'left') {
+      tile.classList.add('shift-left');
+    } else if (direction === 'right') {
+      tile.classList.add('shift-right');
+    } else if (direction === 'up') {
+      tile.classList.add('shift-up');
+    } else if (direction === 'down') {
+      tile.classList.add('shift-down');
+    }
+  });
+
+  // Удаляем классы анимации после завершения
+  setTimeout(() => {
+    tilesToAnimate.forEach(({ tile }) => {
+      tile.classList.remove('shift-left', 'shift-right', 'shift-up', 'shift-down');
+    });
+  }, 500); // 5сек
+}
+
 
 function renderFreeTile() {
   if (!gameState || !gameState.freeTile) return;

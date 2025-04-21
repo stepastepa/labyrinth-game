@@ -980,3 +980,35 @@ select {
 .shift-btn.hidden {
   display: none;
 }
+
+
+/* === tiles animation ===*/
+
+.tile.shift-left {
+  transform: translateX(0);
+  transition: transform 0.5s ease;
+  @starting-style {
+    transform: translateX(100%);
+  }
+}
+.tile.shift-right {
+  transform: translateX(0);
+  transition: transform 0.5s ease;
+  @starting-style {
+    transform: translateX(-100%);
+  }
+}
+.tile.shift-up {
+  transform: translateY(0);
+  transition: transform 0.5s ease;
+  @starting-style {
+    transform: translateY(100%);
+  }
+}
+.tile.shift-down {
+  transform: translateY(0);
+  transition: transform 0.5s ease;
+  @starting-style {
+    transform: translateY(-100%);
+  }
+}

@@ -118,6 +118,8 @@ function updateBoard(row, col, direction, gameState) {
   if (gameState.hasShifted) return;
 
   let shiftedPlayers = [];
+  let shiftData = { row, col, direction }; // Информация о сдвиге
+
   if (row !== undefined) {
     const boardRow = gameState.board[row];
     if (direction === 'left') {
@@ -172,7 +174,7 @@ function updateBoard(row, col, direction, gameState) {
   });
 
   gameState.hasShifted = true;
-  broadcastGameState(gameState, { shiftedPlayers });
+  broadcastGameState(gameState, { shiftData });
 }
 
 function canMove(fromX, fromY, toX, toY, gameState) {
