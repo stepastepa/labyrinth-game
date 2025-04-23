@@ -183,7 +183,7 @@ body {
   justify-content: center;
   box-shadow: 0 0 0 0.15rem var(--player-color);
 
-  container-type: size;
+  container-type: inline-size;
 }
 
 #freeTile .tile-bg {
@@ -266,7 +266,7 @@ body {
     2px 2px 0px 0px var(--player-color),
     3px 3px 0px 0px rgb(0, 0, 0),
     4px 4px 0px 0px var(--player-color); */
-  container-type: size;
+  container-type: inline-size;
 }
 .winner .cards {
   box-shadow: none;
@@ -323,7 +323,10 @@ body {
   height: 100%;
   cursor: pointer;
 
-  container-type: size;
+  container-type: inline-size;
+}
+.tile:has(.start-indicator) {
+  z-index: 2;
 }
 
 .tile-bg {
