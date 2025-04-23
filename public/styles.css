@@ -20,6 +20,16 @@ html {
   --color-1: crimson;
   --color-2: royalblue;
   --color-3: #35b83f;
+  --shadow-offset: 0.3vmin;
+  --artifacts-size: 4vmin;
+  --artifacts-size-card: 2rem;
+}
+@supports (font-size: 35cqw) {
+  :root {
+    --shadow-offset: 3cqw;
+    --artifacts-size: 35cqw;
+    --artifacts-size-card: 50cqw;
+  }
 }
 
 body {
@@ -172,6 +182,8 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 0 0.15rem var(--player-color);
+
+  container-type: size;
 }
 
 #freeTile .tile-bg {
@@ -189,7 +201,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2.5rem;
+  font-size: var(--artifacts-size);
   z-index: 2;
 }
 
@@ -244,7 +256,6 @@ body {
   background: #fff;
   border: 0.2rem solid var(--player-color);
   border-radius: 0.4rem;
-  font-size: 2rem;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -255,6 +266,7 @@ body {
     2px 2px 0px 0px var(--player-color),
     3px 3px 0px 0px rgb(0, 0, 0),
     4px 4px 0px 0px var(--player-color); */
+  container-type: size;
 }
 .winner .cards {
   box-shadow: none;
@@ -267,6 +279,8 @@ body {
   background-position: center;
   background-size: 100% 100%;
   image-rendering: pixelated;
+  font-size: var(--artifacts-size-card);
+  filter: drop-shadow(var(--shadow-offset) var(--shadow-offset) 0px hsla(0deg, 0%, 0%, 0.15));
 
   display: flex;
   justify-content: center;
@@ -308,6 +322,8 @@ body {
   width: 100%;
   height: 100%;
   cursor: pointer;
+
+  container-type: size;
 }
 
 .tile-bg {
@@ -335,9 +351,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 4vmin;
+  font-size: var(--artifacts-size);
   transition: all 0.2s ease;
-  filter: drop-shadow(2px 2px 0px black);
+  filter: drop-shadow(var(--shadow-offset) var(--shadow-offset) 0px black);
 }
 /* делаем артефакты крупнее, чтоб игрок их полностью не закрывал */
 .tile > span:has(+ .player) {
@@ -437,6 +453,7 @@ body {
 }
 
 .effects {
+  opacity: 0;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -486,6 +503,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  filter: drop-shadow(var(--shadow-offset) var(--shadow-offset) 0px black);
 }
 
 .player div {
@@ -497,7 +516,6 @@ body {
   background-size: 500% 100%;
   animation: idle 0.5s steps(4) infinite;
   z-index: 2;
-  filter: drop-shadow(2px 2px 0px black);
 }
 @keyframes idle {
   from {
