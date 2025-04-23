@@ -337,6 +337,7 @@ body {
   transform: translate(-50%, -50%);
   font-size: 4vmin;
   transition: all 0.2s ease;
+  filter: drop-shadow(2px 2px 0px black);
 }
 /* делаем артефакты крупнее, чтоб игрок их полностью не закрывал */
 .tile > span:has(+ .player) {
@@ -496,6 +497,7 @@ body {
   background-size: 500% 100%;
   animation: idle 0.5s steps(4) infinite;
   z-index: 2;
+  filter: drop-shadow(2px 2px 0px black);
 }
 @keyframes idle {
   from {
