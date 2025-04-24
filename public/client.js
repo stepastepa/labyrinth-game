@@ -235,6 +235,9 @@ function renderBoard(movedPlayer, shiftData) {
       btn.classList.remove('hidden');
     }
   });
+
+  // resize tiles bg to prevent jitter
+  resizeTilesBg();
 }
 
 
@@ -446,3 +449,14 @@ buttonInfo.addEventListener('click', () => {
 gameInfoOverlay.addEventListener('click', () => {
   gameInfoOverlay.classList.add('hidden');
 });
+
+
+// grid subpixel jitter bug solution
+function resizeTilesBg() {
+  let tilesBg = document.querySelectorAll("#board .tile .tile-bg");
+  tilesBg.forEach((el) => {
+    el.style.width = Math.ceil(el.closest('.board').offsetWidth / 7) + 'px';
+    el.style.height = Math.ceil(el.closest('.board').offsetHeight / 7) + 'px';
+  });
+}
+window.addEventListener('resize', resizeTilesBg);
