@@ -48,7 +48,8 @@ body {
   display: flex;
   justify-content: stretch;
   align-items: stretch;
-  /* overflow: hidden; */
+  /* will-change: filter; */ /* Safari crop bug */
+  transform: translateZ(0); /* Safari crop bug */
 }
 
 .game-container {

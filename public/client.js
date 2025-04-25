@@ -478,9 +478,9 @@ function cqwFallback() {
   let card = document.querySelector(".cards");
   let freeTile = document.querySelector("#freeTile");
 
-  const cqwBoard = board.innerWidth / 100;
-  const cqwCard = card.innerWidth / 100;
-  const cqwFreeTile = freeTile.innerWidth / 100;
+  const cqwBoard = board.offsetWidth / 100;
+  const cqwCard = card.offsetWidth / 100;
+  const cqwFreeTile = freeTile.offsetWidth / 100;
 
   root.style.setProperty('--shadow-offset', `${cqwBoard / 3}px`);
   root.style.setProperty('--shadow-offset-card', `${cqwCard * 3}px`);
