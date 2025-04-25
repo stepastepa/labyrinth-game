@@ -1,17 +1,8 @@
-// function updateWideAspectClass() {
-//   const ratio = window.innerWidth / window.innerHeight;
-//   document.documentElement.classList.toggle('wide-aspect-ratio', ratio >= 0.84);
-// }
-
-// updateWideAspectClass();
-// window.addEventListener('resize', updateWideAspectClass);
-// window.addEventListener('orientationchange', updateWideAspectClass);
-
 const query = '(min-aspect-ratio: 0.84/1)';
 const media = window.matchMedia(query);
 
 function changeLayout() {
-  let root = document.querySelector("html");
+  let root = document.querySelector('html');
   if (media.matches !== (window.innerWidth / window.innerHeight >= 0.84)) {
     root.classList.add('wide-aspect-ratio');
   } else {
@@ -21,3 +12,4 @@ function changeLayout() {
 
 changeLayout(); // initial
 window.addEventListener('resize', changeLayout);
+window.addEventListener('orientationchange', changeLayout);
