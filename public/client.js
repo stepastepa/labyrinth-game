@@ -238,6 +238,11 @@ function renderBoard(movedPlayer, shiftData) {
 
   // resize tiles bg to prevent jitter
   resizeTilesBg();
+
+  // fallback для cqw
+  if (!supportsCqw()) {
+    cqwFallback();
+  }
 }
 
 
@@ -455,8 +460,36 @@ gameInfoOverlay.addEventListener('click', () => {
 function resizeTilesBg() {
   let tilesBg = document.querySelectorAll("#board .tile .tile-bg");
   tilesBg.forEach((el) => {
-    el.style.width = Math.ceil(el.closest('.board').offsetWidth / 7) + 'px';
-    el.style.height = Math.ceil(el.closest('.board').offsetHeight / 7) + 'px';
+    el.style.width = Math.ceil(el.closest('#board').offsetWidth / 7) + 'px';
+    el.style.height = Math.ceil(el.closest('#board').offsetHeight / 7) + 'px';
   });
 }
 window.addEventListener('resize', resizeTilesBg);
+
+
+// cqw fallback
+function supportsCqw() {
+  return CSS.supports('width', '1cqw');
+}
+
+function cqwFallback() {
+  let root = document.querySelector("html");
+  let board = document.querySelector(".board-wrapper");
+  let card = document.querySelector(".cards");
+  let freeTile = document.querySelector("#freeTile");
+
+  const cqwBoard = board.innerWidth / 100;
+  const cqwCard = card.innerWidth / 100;
+  const cqwFreeTile = freeTile.innerWidth / 100;
+
+  root.style.setProperty('--shadow-offset', `${cqwBoard / 3}px`);
+  root.style.setProperty('--shadow-offset-card', `${cqwCard * 3}px`);
+  root.style.setProperty('--shadow-offset-freetile', `${cqwFreeTile * 3.5}px`);
+  root.style.setProperty('--artifacts-size', `${cqwBoard * 4}px`);
+  root.style.setProperty('--artifacts-size-card', `${cqwCard * 50}px`);
+  root.style.setProperty('--artifacts-size-freetile', `${cqwFreeTile * 35}px`);
+}
+
+if (!supportsCqw()) {
+  window.addEventListener('resize', cqwFallback);
+}
