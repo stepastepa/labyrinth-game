@@ -293,7 +293,7 @@ body {
   background-size: 100% 100%;
   image-rendering: pixelated;
   font-size: var(--artifacts-size-card);
-  filter: drop-shadow(var(--shadow-offset-card) var(--shadow-offset-card) 0px hsla(0deg, 0%, 0%, 0.15));
+  text-shadow: var(--shadow-offset-card) var(--shadow-offset-card) 0 hsla(0deg, 0%, 0%, 0.15);
 
   display: flex;
   justify-content: center;
