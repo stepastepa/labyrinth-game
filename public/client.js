@@ -458,12 +458,11 @@ gameInfoOverlay.addEventListener('click', () => {
 
 // grid subpixel jitter bug solution
 function resizeTilesBg() {
-  requestAnimationFrame(() => { // one frame delay to solve mobile orientation bug in old safari due to aspectRatioWatcher.js
-    let tilesBg = document.querySelectorAll("#board .tile .tile-bg");
-    tilesBg.forEach((el) => {
-      el.style.width = Math.ceil(el.closest('#board').offsetWidth / 7) + 'px';
-      el.style.height = Math.ceil(el.closest('#board').offsetHeight / 7) + 'px';
-    });
+  // aspectRatioWatcher.js has to be the first in HTML to prevent mobile orientation bug!!!
+  let tilesBg = document.querySelectorAll("#board .tile .tile-bg");
+  tilesBg.forEach((el) => {
+    el.style.width = Math.ceil(el.closest('#board').offsetWidth / 7) + 'px';
+    el.style.height = Math.ceil(el.closest('#board').offsetHeight / 7) + 'px';
   });
 }
 window.addEventListener('resize', resizeTilesBg);
