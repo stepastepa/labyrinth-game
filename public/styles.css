@@ -368,7 +368,7 @@ body {
 }
 /* делаем артефакты крупнее, чтоб игрок их полностью не закрывал */
 .tile > span:has(+ .player) {
-  font-size: 6vmin;
+  font-size: calc(var(--artifacts-size) * 1.6);
 }
 
 .start-indicator {
